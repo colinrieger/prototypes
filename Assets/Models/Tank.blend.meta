@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: 1cfd0bc39e260c34db0920a84468200f
-timeCreated: 1487213090
+guid: be551b4b46ae33d4e9ad8d8654856951
+timeCreated: 1487399664
 licenseType: Pro
 ModelImporter:
   serializedVersion: 19
@@ -21,9 +21,11 @@ ModelImporter:
     3300000: Barrel
     3300002: Chassis
     3300004: Turret
-    4300000: Barrel
-    4300002: Turret
-    4300004: Chassis
+    4300000: Turret
+    4300002: Chassis
+    4300004: Barrel
+    7400000: Default Take
+    9500000: //RootNode
   materials:
     importMaterials: 1
     materialName: 0
@@ -86,7 +88,7 @@ ModelImporter:
     hasExtraRoot: 0
     skeletonHasParents: 1
   lastHumanDescriptionAvatarSource: {instanceID: 0}
-  animationType: 0
+  animationType: 2
   humanoidOversampling: 1
   additionalBone: 0
   userData: 

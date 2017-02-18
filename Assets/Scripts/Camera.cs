@@ -14,10 +14,7 @@ public class Camera : MonoBehaviour
 
     private void FixedUpdate()
     {
-        float currentAngle = transform.eulerAngles.y;
-        float desiredAngle = m_Target.transform.eulerAngles.y;
-
-        Quaternion rotation = Quaternion.Euler(0, desiredAngle, 0);
+        Quaternion rotation = Quaternion.Euler(0, m_Target.transform.eulerAngles.y, 0);
         transform.position = m_Target.transform.position - (rotation * m_Offset);
 
         transform.LookAt(m_Target.transform);
