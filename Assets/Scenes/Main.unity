@@ -439,10 +439,15 @@ Prefab:
       propertyPath: m_RootOrder
       value: 3
       objectReference: {fileID: 0}
-    - target: {fileID: 54764294524324246, guid: 6beee02e766e9c3478278e3c8ad79a2d,
+    - target: {fileID: 224280867259811902, guid: 6beee02e766e9c3478278e3c8ad79a2d,
         type: 2}
-      propertyPath: m_Constraints
-      value: 80
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 224280867259811902, guid: 6beee02e766e9c3478278e3c8ad79a2d,
+        type: 2}
+      propertyPath: m_AnchorMax.y
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 6beee02e766e9c3478278e3c8ad79a2d, type: 2}

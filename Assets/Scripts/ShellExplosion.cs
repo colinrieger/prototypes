@@ -6,11 +6,11 @@ public class ShellExplosion : MonoBehaviour
     public float m_MaxDamage = 100f;
     public float m_Force = 1000f;
     public float m_Radius = 5f;
-    public float m_ShellLifetime = 2f;
+    public float m_Lifetime = 2f;
 
     private void Start()
     {
-        Destroy(gameObject, m_ShellLifetime);
+        Destroy(gameObject, m_Lifetime);
     }
 
     private void OnTriggerEnter(Collider other)
@@ -24,14 +24,12 @@ public class ShellExplosion : MonoBehaviour
 
             targetRigidbody.AddExplosionForce(m_Force, transform.position, m_Radius);
 
-            /*TankHealth targetHealth = targetRigidbody.GetComponent<TankHealth>();
+            TankControls tankControls = targetRigidbody.GetComponent<TankControls>();
 
-            if (!targetHealth)
+            if (!tankControls)
                 continue;
-
-            float damage = CalculateDamage(targetRigidbody.position);
-
-            targetHealth.TakeDamage(damage);*/
+            
+            tankControls.ApplyDamage(CalculateDamage(targetRigidbody.position));
         }
 
         Destroy(gameObject);
@@ -40,8 +38,7 @@ public class ShellExplosion : MonoBehaviour
     private float CalculateDamage(Vector3 targetPosition)
     {
         Vector3 explosionToTarget = targetPosition - transform.position;
-        float explosionDistance = explosionToTarget.magnitude;
-        float relativeDistance = (m_Radius - explosionDistance) / m_Radius;
+        float relativeDistance = (m_Radius - explosionToTarget.magnitude) / m_Radius;
 
         return Mathf.Max(0f, relativeDistance * m_MaxDamage);
     }
