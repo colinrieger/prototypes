@@ -7,16 +7,19 @@ public class TankControls : MonoBehaviour
 {
     public float m_StartingHealth = 100f;
     public float m_Speed = 16f;
-    public float m_TurnSpeed = 180f;
+    public float m_TankTurnSpeed = 180f;
+    public float m_TurretTurnSpeed = 180f;
     public float m_ShellForce = 100f;
     public Rigidbody m_ShellRigidBody;
     public Transform m_ShellOriginTransform;
+    public Transform m_TurretTranform;
     public Slider m_HealthSlider;
 
     private float m_CurrentHealth;
     private Rigidbody m_TankRigidbody;
     private float m_HorizontalInputValue;
     private float m_VerticalInputValue;
+    private float m_MouseXInputValue;
 
     private void Awake()
     {
@@ -29,6 +32,7 @@ public class TankControls : MonoBehaviour
         m_TankRigidbody.isKinematic = false;
         m_HorizontalInputValue = 0f;
         m_VerticalInputValue = 0f;
+        m_MouseXInputValue = 0f;
 
         UpdateHealthSlider();
     }
@@ -46,6 +50,7 @@ public class TankControls : MonoBehaviour
     {
         m_HorizontalInputValue = Input.GetAxis("Horizontal");
         m_VerticalInputValue = Input.GetAxis("Vertical");
+        m_MouseXInputValue = Input.GetAxis("Mouse X");
 
         if (Input.GetButtonDown("Fire1"))
             Fire();
@@ -76,9 +81,12 @@ public class TankControls : MonoBehaviour
         Vector3 movement = transform.forward * m_VerticalInputValue * m_Speed * Time.deltaTime;
         m_TankRigidbody.MovePosition(m_TankRigidbody.position + movement);
 
-        float turn = m_HorizontalInputValue * m_TurnSpeed * Time.deltaTime;
-        Quaternion turnRotation = Quaternion.Euler(0f, turn, 0f);
+        float tankTurn = m_HorizontalInputValue * m_TankTurnSpeed * Time.deltaTime;
+        Quaternion turnRotation = Quaternion.Euler(0f, tankTurn, 0f);
         m_TankRigidbody.MoveRotation(m_TankRigidbody.rotation * turnRotation);
+
+        float turretTurn = m_MouseXInputValue * m_TurretTurnSpeed * Time.deltaTime;
+        m_TurretTranform.Rotate(0, turretTurn - tankTurn, 0);
     }
 
     private void Fire()
