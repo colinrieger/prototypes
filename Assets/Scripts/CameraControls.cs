@@ -1,8 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-public class Camera : MonoBehaviour
+public class CameraControls : MonoBehaviour
 {
     public GameObject m_Target;
     Vector3 m_Offset;

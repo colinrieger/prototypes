@@ -1,13 +1,12 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 public class TankControls : MonoBehaviour
 {
+    public bool m_IsAI = false;
     public float m_StartingHealth = 100f;
     public float m_Speed = 16f;
-    public float m_TankTurnSpeed = 180f;
+    public float m_TankTurnSpeed = 90f;
     public float m_TurretTurnSpeed = 180f;
     public float m_ShellForce = 100f;
     public Rigidbody m_ShellRigidBody;
@@ -48,12 +47,15 @@ public class TankControls : MonoBehaviour
 
     void Update ()
     {
-        m_HorizontalInputValue = Input.GetAxis("Horizontal");
-        m_VerticalInputValue = Input.GetAxis("Vertical");
-        m_MouseXInputValue = Input.GetAxis("Mouse X");
+        if (!m_IsAI)
+        {
+            m_HorizontalInputValue = Input.GetAxis("Horizontal");
+            m_VerticalInputValue = Input.GetAxis("Vertical");
+            m_MouseXInputValue = Input.GetAxis("Mouse X");
 
-        if (Input.GetButtonDown("Fire1"))
-            Fire();
+            if (Input.GetButtonDown("Fire1"))
+                Fire();
+        }
     }
 
     private void FixedUpdate()

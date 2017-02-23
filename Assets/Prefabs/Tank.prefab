@@ -527,9 +527,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac119784cb5c05e4fbc80c8ec1b07ccc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_IsAI: 0
   m_StartingHealth: 100
   m_Speed: 16
-  m_TankTurnSpeed: 180
+  m_TankTurnSpeed: 90
   m_TurretTurnSpeed: 180
   m_ShellForce: 100
   m_ShellRigidBody: {fileID: 54745120162670004, guid: 712aa66f90ecf7e41b1af877009c90bd,
