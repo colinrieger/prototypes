@@ -325,7 +325,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 821d1baaf1bd9f04caedd9b531a554bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_CameraControls: {fileID: 427577685}
   m_TankPrefab: {fileID: 1779732471802622, guid: 6beee02e766e9c3478278e3c8ad79a2d,
     type: 2}
 --- !u!4 &1120093751

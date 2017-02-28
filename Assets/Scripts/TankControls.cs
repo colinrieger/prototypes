@@ -12,24 +12,29 @@ public class TankControls : MonoBehaviour
     public Transform m_ShellOriginTransform;
     public Transform m_TurretTranform;
     public Slider m_HealthSlider;
+    public Slider m_CooldownSlider;
 
     private float m_CurrentHealth;
     private float m_CurrentFireCooldown;
 
-    private const float c_FireCooldown = 6f; // seconds
+    private const float c_FireCooldown = 5f; // seconds
 
     private void OnEnable()
     {
-        m_CurrentFireCooldown = 0f;
         m_CurrentHealth = m_StartingHealth;
+        m_CurrentFireCooldown = 0f;
 
         UpdateHealthSlider();
+        UpdateCooldownSlider();
     }
 
     void Update()
     {
         if (m_CurrentFireCooldown > 0f)
+        {
             m_CurrentFireCooldown -= Time.deltaTime;
+            UpdateCooldownSlider();
+        }
     }
 
     public void Fire()
@@ -39,6 +44,7 @@ public class TankControls : MonoBehaviour
         Rigidbody shellInstance = Instantiate(m_ShellRigidBody, m_ShellOriginTransform.position, m_ShellOriginTransform.rotation) as Rigidbody;
         shellInstance.velocity = m_ShellForce * m_ShellOriginTransform.forward;
         m_CurrentFireCooldown = c_FireCooldown;
+        UpdateCooldownSlider();
     }
 
     public void ApplyDamage(float damage)
@@ -53,7 +59,12 @@ public class TankControls : MonoBehaviour
 
     private void UpdateHealthSlider()
     {
-        m_HealthSlider.value = m_CurrentHealth;
+        m_HealthSlider.value = (m_CurrentHealth / m_StartingHealth) * 100f;
+    }
+
+    private void UpdateCooldownSlider()
+    {
+        m_CooldownSlider.value = (m_CurrentFireCooldown / c_FireCooldown) * 100f;
     }
 
     private void Death()
