@@ -111,7 +111,7 @@ MonoBehaviour:
   m_TankLayerMask:
     serializedVersion: 2
     m_Bits: 512
-  m_MaxDamage: 100
+  m_MaxDamage: 50
   m_Force: 1000
   m_Radius: 5
   m_Lifetime: 2

@@ -527,9 +527,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac119784cb5c05e4fbc80c8ec1b07ccc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_IsAI: 0
   m_StartingHealth: 100
-  m_Speed: 16
+  m_Speed: 20
   m_TankTurnSpeed: 90
   m_TurretTurnSpeed: 180
   m_ShellForce: 100

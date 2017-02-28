@@ -3,7 +3,7 @@
 public class ShellExplosion : MonoBehaviour
 {
     public LayerMask m_TankLayerMask;
-    public float m_MaxDamage = 100f;
+    public float m_MaxDamage = 50f;
     public float m_Force = 1000f;
     public float m_Radius = 5f;
     public float m_Lifetime = 2f;

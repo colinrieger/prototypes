@@ -2,7 +2,7 @@
 
 public class CameraControls : MonoBehaviour
 {
-    public GameObject m_Target;
+    [HideInInspector] public GameObject m_Target;
     Vector3 m_Offset = new Vector3(0f, -2f, 6f);
 
     private void FixedUpdate()
