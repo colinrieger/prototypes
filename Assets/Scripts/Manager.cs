@@ -11,7 +11,7 @@ public class Manager : MonoBehaviour
         SpawnPlayerTank();
         SpawnAITank();
     }
-    
+
     private void SpawnPlayerTank()
     {
         m_PlayerTank = Instantiate(m_TankPrefab, new Vector3(0f, 0f, 10f), new Quaternion(0f, 0f, 0f, 0f)) as GameObject;
