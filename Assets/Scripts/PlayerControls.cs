@@ -31,7 +31,7 @@ public class PlayerControls : MonoBehaviour
     {
         Vector3 movement = transform.forward * m_VerticalInputValue * m_TankControls.m_Speed * Time.deltaTime;
         Quaternion tankRotation = Quaternion.Euler(0f, m_HorizontalInputValue * m_TankControls.m_TankRotationSpeed * Time.deltaTime, 0f);
-        Quaternion turretRotation = Quaternion.Euler(0f, m_MouseXInputValue * m_TankControls.m_TurretRotationSpeed * Time.deltaTime, 0f);
+        Quaternion turretRotation = Quaternion.Euler(0f, m_MouseXInputValue * m_TankControls.m_TurretRotationSpeed * Time.deltaTime, 0f) * Quaternion.Inverse(tankRotation);
 
         m_TankRigidbody.MovePosition(m_TankRigidbody.position + movement);
         m_TankRigidbody.MoveRotation(m_TankRigidbody.rotation * tankRotation);

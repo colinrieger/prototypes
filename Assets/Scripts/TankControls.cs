@@ -6,9 +6,9 @@ public class TankControls : MonoBehaviour
     public float m_StartingHealth = 100f;
     public float m_Speed = 16f;
     public float m_TankRotationSpeed = 90f;
-    public float m_TurretRotationSpeed = 180f;
+    public float m_TurretRotationSpeed = 90f;
     public float m_ShellForce = 100f;
-    public float m_FireCooldown = 3f; // seconds
+    public float m_FireCooldown = 2f; // seconds
     public Rigidbody m_ShellRigidBody;
     public Transform m_ShellOriginTransform;
     public Transform m_TurretTranform;
