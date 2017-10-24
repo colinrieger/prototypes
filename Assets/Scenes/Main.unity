@@ -150,6 +150,16 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 55aff5649f4c9dd48af2ac69190a8340, type: 2}
   m_IsPrefabParent: 0
+--- !u!1 &421460237 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1215742523897212, guid: 55aff5649f4c9dd48af2ac69190a8340,
+    type: 2}
+  m_PrefabInternal: {fileID: 421460236}
+--- !u!1 &421460238 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1361276856370778, guid: 55aff5649f4c9dd48af2ac69190a8340,
+    type: 2}
+  m_PrefabInternal: {fileID: 421460236}
 --- !u!1 &427577679
 GameObject:
   m_ObjectHideFlags: 0
@@ -281,6 +291,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_TankPrefab: {fileID: 1779732471802622, guid: 6beee02e766e9c3478278e3c8ad79a2d,
     type: 2}
+  m_PlayerSpawn: {fileID: 421460238}
+  m_AISpawn: {fileID: 421460237}
 --- !u!4 &1120093751
 Transform:
   m_ObjectHideFlags: 0
