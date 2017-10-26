@@ -25,11 +25,8 @@ public class ShellExplosion : MonoBehaviour
             targetRigidbody.AddExplosionForce(m_Force, transform.position, m_Radius);
 
             TankControls tankControls = targetRigidbody.GetComponent<TankControls>();
-
-            if (!tankControls)
-                continue;
-            
-            tankControls.ApplyDamage(CalculateDamage(targetRigidbody.position));
+            if (tankControls != null)
+                tankControls.ApplyDamage(CalculateDamage(targetRigidbody.position));
         }
 
         Destroy(gameObject);
