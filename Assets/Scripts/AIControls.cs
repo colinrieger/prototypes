@@ -12,7 +12,6 @@ public class AIControls : MonoBehaviour
 
     private const float c_MaxAngleToTargetToMove = 10f;
     private const float c_DistanceToTargetOffset = 20f;
-    private const float c_MaxAngleToTargetToFire = 1f;
 
     private void Start()
     {
@@ -64,12 +63,11 @@ public class AIControls : MonoBehaviour
 
         Quaternion turretRotation = Quaternion.RotateTowards(m_TankTurret.transform.rotation, rotationToTarget, Time.deltaTime * m_TankControls.m_TurretRotationSpeed);
         m_TankTurret.transform.rotation = turretRotation;
-
-        float turretToTargetAngle = Quaternion.Angle(rotationToTarget, turretRotation);
-        if (turretToTargetAngle < c_MaxAngleToTargetToFire && m_TargetTank.activeSelf)
+        
+        if (m_TargetTank.activeSelf)
         {
             RaycastHit hit;
-            if (Physics.Raycast(m_TankTurret.transform.position + new Vector3(0f, 0.5f, 0f), targetDirection, out hit) && hit.transform == m_TargetTank.transform)
+            if (Physics.Raycast(m_TankTurret.transform.position, targetDirection, out hit) && hit.transform == m_TargetTank.transform)
                 m_TankControls.Fire();
         }
     }
