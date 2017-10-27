@@ -574,6 +574,8 @@ MonoBehaviour:
   m_FireCooldown: 2
   m_ShellRigidBody: {fileID: 54745120162670004, guid: 712aa66f90ecf7e41b1af877009c90bd,
     type: 2}
+  m_ExplosionPrefab: {fileID: 1351350238964040, guid: 202ed250b90766947b693466cede564a,
+    type: 2}
   m_ShellOriginTransform: {fileID: 4598435015792924}
   m_TurretTranform: {fileID: 4248881681026554}
   m_HealthSlider: {fileID: 114033612257127410}

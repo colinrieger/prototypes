@@ -10,6 +10,7 @@ public class TankControls : MonoBehaviour
     public float m_ShellForce = 100f;
     public float m_FireCooldown = 2f; // seconds
     public Rigidbody m_ShellRigidBody;
+    public GameObject m_ExplosionPrefab;
     public Transform m_ShellOriginTransform;
     public Transform m_TurretTranform;
     public Slider m_HealthSlider;
@@ -17,6 +18,13 @@ public class TankControls : MonoBehaviour
 
     private float m_CurrentHealth;
     private float m_CurrentFireCooldown;
+    private ParticleSystem m_ExplosionParticles;
+
+    private void Awake()
+    {
+        m_ExplosionParticles = Instantiate(m_ExplosionPrefab).GetComponent<ParticleSystem>();
+        m_ExplosionParticles.gameObject.SetActive(false);
+    }
 
     private void OnEnable()
     {
@@ -68,7 +76,10 @@ public class TankControls : MonoBehaviour
 
     private void Death()
     {
-        if (gameObject.activeSelf)
-            gameObject.SetActive(false);
+        m_ExplosionParticles.transform.position = transform.position;
+        m_ExplosionParticles.gameObject.SetActive(true);
+        m_ExplosionParticles.Play();
+
+        gameObject.SetActive(false);
     }
 }

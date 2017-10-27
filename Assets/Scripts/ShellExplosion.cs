@@ -3,6 +3,7 @@
 public class ShellExplosion : MonoBehaviour
 {
     public LayerMask m_TankLayerMask;
+    public ParticleSystem m_ExplosionParticles;
     public float m_MaxDamage = 50f;
     public float m_Force = 1000f;
     public float m_Radius = 5f;
@@ -28,6 +29,12 @@ public class ShellExplosion : MonoBehaviour
             if (tankControls != null)
                 tankControls.ApplyDamage(CalculateDamage(targetRigidbody.position));
         }
+        
+        m_ExplosionParticles.transform.parent = null;
+        m_ExplosionParticles.Play();
+
+        ParticleSystem.MainModule mainModule = m_ExplosionParticles.main;
+        Destroy(m_ExplosionParticles.gameObject, mainModule.duration);
 
         Destroy(gameObject);
     }
