@@ -22,7 +22,7 @@ public class Manager : MonoBehaviour
     private void SpawnPlayerTank()
     {
         m_PlayerTank = Instantiate(m_TankPrefab, m_PlayerSpawn.position, m_PlayerSpawn.rotation) as GameObject;
-        Camera.main.GetComponent<CameraControls>().m_Target = m_PlayerTank.transform.Find("Renderers/Turret").gameObject;
+        Camera.main.GetComponent<CameraControls>().m_Target = m_PlayerTank.transform.Find("Renderers/Turret/CameraTargetTransform").gameObject;
         m_PlayerTank.AddComponent<PlayerControls>();
     }
 
