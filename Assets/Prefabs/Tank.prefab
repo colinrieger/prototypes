@@ -599,6 +599,9 @@ MonoBehaviour:
   m_Speed: 20
   m_TankRotationSpeed: 90
   m_TurretRotationSpeed: 180
+  m_BarrelRotationSpeed: 15
+  m_BarrelMinXRotation: -2
+  m_BarrelMaxXRotation: 2
   m_ShellForce: 100
   m_FireCooldown: 2
   m_ShellRigidBody: {fileID: 54745120162670004, guid: 712aa66f90ecf7e41b1af877009c90bd,

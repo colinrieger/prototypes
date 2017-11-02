@@ -7,6 +7,9 @@ public class TankControls : MonoBehaviour
     public float m_Speed = 16f;
     public float m_TankRotationSpeed = 90f;
     public float m_TurretRotationSpeed = 90f;
+    public float m_BarrelRotationSpeed = 15f;
+    public float m_BarrelMinXRotation = -2f;
+    public float m_BarrelMaxXRotation = 2f;
     public float m_ShellForce = 100f;
     public float m_FireCooldown = 2f; // seconds
     public Rigidbody m_ShellRigidBody;
