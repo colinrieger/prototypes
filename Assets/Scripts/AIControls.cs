@@ -44,7 +44,7 @@ public class AIControls : MonoBehaviour
         m_NavMeshAgent.destination = m_TargetTank.transform.position;
 
         Vector3 targetDirection = m_NavMeshAgent.nextPosition - transform.position;
-        Quaternion rotationToTarget = Quaternion.LookRotation(targetDirection);
+        Quaternion rotationToTarget = (targetDirection != Vector3.zero) ? Quaternion.LookRotation(targetDirection) : new Quaternion();
         rotationToTarget.x = 0;
         rotationToTarget.z = 0;
 
