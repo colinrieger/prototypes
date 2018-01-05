@@ -23,6 +23,9 @@ public class PlayerControls : MonoBehaviour
 
     void Update()
     {
+        if (Time.timeScale == 0)
+            return;
+
         m_VerticalInputValue = Input.GetAxis("Vertical");
         m_HorizontalInputValue = Input.GetAxis("Horizontal");
         m_MouseYInputValue = Input.GetAxis("Mouse Y");
