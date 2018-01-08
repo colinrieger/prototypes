@@ -151,7 +151,6 @@ public class Manager : MonoBehaviour
     {
         GameObject aiTank = Instantiate(m_TankPrefab) as GameObject;
         aiTank.AddComponent<AIControls>().m_TargetTank = m_PlayerTank;
-        aiTank.AddComponent<NavMeshAgent>();
         m_Tanks.Add(aiTank);
     }
 

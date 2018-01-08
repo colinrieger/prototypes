@@ -23,7 +23,7 @@ public class AIControls : MonoBehaviour
         m_TankTurret = transform.Find("Renderers/Turret").gameObject;
         m_TargetTankTurret = m_TargetTank.transform.Find("Renderers/Turret").gameObject;
 
-        m_NavMeshAgent = GetComponent<NavMeshAgent>();
+        m_NavMeshAgent = gameObject.AddComponent<NavMeshAgent>();
         m_NavMeshAgent.speed = m_TankControls.m_Speed;
         m_NavMeshAgent.angularSpeed = m_TankControls.m_TankRotationSpeed;
         m_NavMeshAgent.autoBraking = false;
