@@ -12,6 +12,7 @@ public class AIControls : MonoBehaviour
     private NavMeshAgent m_NavMeshAgent;
 
     private const float c_MaxAngleToTargetToMove = 10f;
+    private const float c_MaxAngleToTargetToFire = 1f;
     private const float c_DistanceToTargetOffset = 20f;
     private const float c_ShellRadius = 0.2f;
 
@@ -70,8 +71,11 @@ public class AIControls : MonoBehaviour
         Quaternion turretRotation = Quaternion.RotateTowards(m_TankTurret.transform.rotation, rotationToTarget, Time.deltaTime * m_TankControls.m_TurretRotationSpeed);
         m_TankTurret.transform.rotation = turretRotation;
 
-        RaycastHit hit;
-        if (Physics.SphereCast(m_TankTurret.transform.position, c_ShellRadius, targetDirection, out hit) && hit.transform == m_TargetTank.transform)
-            m_TankControls.Fire();
+        if (Quaternion.Angle(rotationToTarget, turretRotation) < c_MaxAngleToTargetToFire)
+        {
+            RaycastHit hit;
+            if (Physics.SphereCast(m_TankTurret.transform.position, c_ShellRadius, targetDirection, out hit) && hit.transform == m_TargetTank.transform)
+                m_TankControls.Fire();
+        }
     }
 }
