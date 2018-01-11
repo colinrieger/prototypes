@@ -7,11 +7,20 @@ public class ShellExplosion : MonoBehaviour
     public float m_MaxDamage = 50f;
     public float m_Force = 1000f;
     public float m_Radius = 5f;
-    public float m_Lifetime = 2f;
+    public float m_Lifetime = 10f;
+
+    private Rigidbody m_ShellRigidbody;
 
     private void Start()
     {
+        m_ShellRigidbody = GetComponent<Rigidbody>();
+
         Destroy(gameObject, m_Lifetime);
+    }
+
+    private void FixedUpdate()
+    {
+        transform.rotation = Quaternion.LookRotation(m_ShellRigidbody.velocity);
     }
 
     private void OnTriggerEnter(Collider other)
