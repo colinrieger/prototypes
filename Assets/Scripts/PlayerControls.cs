@@ -12,13 +12,19 @@ public class PlayerControls : MonoBehaviour
     private TankControls m_TankControls;
     private GameObject m_TankTurret;
     private GameObject m_TankBarrel;
+    private LineRenderer m_FiringArc;
+
+    private const int c_FiringArcPositions = 1000;
 
     private void Start()
     {
         m_TankRigidbody = GetComponent<Rigidbody>();
         m_TankControls = GetComponent<TankControls>();
         m_TankTurret = transform.Find("Renderers/Turret").gameObject;
-        m_TankBarrel = transform.Find("Renderers/Turret/Barrel").gameObject;
+        m_TankBarrel = m_TankTurret.transform.Find("Barrel").gameObject;
+        m_FiringArc = m_TankBarrel.transform.Find("ShellOriginTransform/FiringArc").GetComponent<LineRenderer>();
+        
+        m_FiringArc.positionCount = c_FiringArcPositions;
     }
 
     void Update()
@@ -45,7 +51,7 @@ public class PlayerControls : MonoBehaviour
                                           Quaternion.Inverse(tankRotation);
 
         Quaternion barrelRotation = m_TankBarrel.transform.rotation *
-                                    Quaternion.Euler(-m_MouseYInputValue * m_TankControls.m_BarrelRotationSpeed * Time.deltaTime,0f, 0f);
+                                    Quaternion.Euler(-m_MouseYInputValue * m_TankControls.m_BarrelRotationSpeed * Time.deltaTime, 0f, 0f);
         m_TankBarrel.transform.rotation = Quaternion.Euler(ClampAngle(barrelRotation.eulerAngles.x,
                                                                       m_TankControls.m_BarrelMinXRotation,
                                                                       m_TankControls.m_BarrelMaxXRotation),
@@ -54,6 +60,30 @@ public class PlayerControls : MonoBehaviour
 
         Vector3 movement = transform.forward * m_VerticalInputValue * m_TankControls.m_Speed * Time.deltaTime;
         m_TankRigidbody.MovePosition(m_TankRigidbody.position + movement);
+
+        UpdateFiringArc();
+    }
+
+    private void UpdateFiringArc()
+    {
+        Vector3[] arcArray = new Vector3[c_FiringArcPositions + 1];
+        
+        float fireAngle = m_TankBarrel.transform.rotation.eulerAngles.x;
+        if (fireAngle > 180)
+            fireAngle -= 360;
+        float radianAngle = Mathf.Deg2Rad * -fireAngle;
+        float v = m_TankControls.m_ShellVelocity;
+
+        for (int i = 0; i <= c_FiringArcPositions; i++)
+        {
+            float t = i * Time.fixedDeltaTime;
+            float z = v * t * Mathf.Cos(radianAngle);
+            float y = v * t * Mathf.Sin(radianAngle) - ((-Physics.gravity.y * t * t) / 2);
+            arcArray[i] = new Vector3(0f, y, z);
+        }
+
+        m_FiringArc.SetPositions(arcArray);
+        m_FiringArc.transform.localRotation = Quaternion.Euler(-m_TankBarrel.transform.localEulerAngles.x, m_TankBarrel.transform.localEulerAngles.y, m_TankBarrel.transform.localEulerAngles.z);
     }
 
     private float ClampAngle(float angle, float min, float max)

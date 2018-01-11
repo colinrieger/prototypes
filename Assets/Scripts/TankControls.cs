@@ -4,18 +4,17 @@ using UnityEngine.UI;
 public class TankControls : MonoBehaviour
 {
     public float m_StartingHealth = 100f;
-    public float m_Speed = 16f;
+    public float m_Speed = 20f;
     public float m_TankRotationSpeed = 90f;
-    public float m_TurretRotationSpeed = 90f;
-    public float m_BarrelRotationSpeed = 15f;
-    public float m_BarrelMinXRotation = -2f;
-    public float m_BarrelMaxXRotation = 2f;
-    public float m_ShellForce = 100f;
+    public float m_TurretRotationSpeed = 180f;
+    public float m_BarrelRotationSpeed = 30f;
+    public float m_BarrelMinXRotation = -15f;
+    public float m_BarrelMaxXRotation = 0f;
+    public float m_ShellVelocity = 60f;
     public float m_FireCooldown = 2f; // seconds
     public Rigidbody m_ShellRigidBody;
     public GameObject m_ExplosionPrefab;
     public Transform m_ShellOriginTransform;
-    public Transform m_TurretTranform;
     public Slider m_HealthSlider;
     public Slider m_CooldownSlider;
 
@@ -52,7 +51,7 @@ public class TankControls : MonoBehaviour
         if (m_CurrentFireCooldown > 0f)
             return;
         Rigidbody shellInstance = Instantiate(m_ShellRigidBody, m_ShellOriginTransform.position, m_ShellOriginTransform.rotation) as Rigidbody;
-        shellInstance.velocity = m_ShellForce * m_ShellOriginTransform.forward;
+        shellInstance.velocity = m_ShellVelocity * m_ShellOriginTransform.forward;
         m_CurrentFireCooldown = m_FireCooldown;
         UpdateCooldownSlider();
     }

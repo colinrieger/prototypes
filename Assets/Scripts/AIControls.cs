@@ -8,6 +8,7 @@ public class AIControls : MonoBehaviour
     private Rigidbody m_TankRigidbody;
     private TankControls m_TankControls;
     private GameObject m_TankTurret;
+    private GameObject m_TankBarrel;
     private GameObject m_TargetTankTurret;
     private NavMeshAgent m_NavMeshAgent;
 
@@ -20,7 +21,10 @@ public class AIControls : MonoBehaviour
     {
         m_TankRigidbody = GetComponent<Rigidbody>();
         m_TankControls = GetComponent<TankControls>();
+        m_TankControls.m_ShellVelocity = 100f;
         m_TankTurret = transform.Find("Renderers/Turret").gameObject;
+        m_TankBarrel = m_TankTurret.transform.Find("Barrel").gameObject;
+        m_TankBarrel.transform.localEulerAngles = new Vector3(-2f, 0f, 0f);
         m_TargetTankTurret = m_TargetTank.transform.Find("Renderers/Turret").gameObject;
 
         m_NavMeshAgent = gameObject.AddComponent<NavMeshAgent>();
