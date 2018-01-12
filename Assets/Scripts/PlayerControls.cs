@@ -83,6 +83,7 @@ public class PlayerControls : MonoBehaviour
         }
 
         m_FiringArc.SetPositions(arcArray);
+        // arc positions are calculated locally, so counter the x barrel rotation on the firing arc
         m_FiringArc.transform.localRotation = Quaternion.Euler(-m_TankBarrel.transform.localEulerAngles.x, m_TankBarrel.transform.localEulerAngles.y, m_TankBarrel.transform.localEulerAngles.z);
     }
 
