@@ -18,6 +18,7 @@ public class TankControls : MonoBehaviour
     public Slider m_HealthSlider;
     public Slider m_CooldownSlider;
 
+    private Rigidbody m_TankRigidbody;
     private float m_CurrentHealth;
     private float m_CurrentFireCooldown;
     private ParticleSystem m_ExplosionParticles;
@@ -28,10 +29,18 @@ public class TankControls : MonoBehaviour
         m_ExplosionParticles.gameObject.SetActive(false);
     }
 
+    private void Start()
+    {
+        m_TankRigidbody = GetComponent<Rigidbody>();
+    }
+
     private void OnEnable()
     {
         m_CurrentHealth = m_StartingHealth;
         m_CurrentFireCooldown = 0f;
+
+        m_TankRigidbody.velocity = Vector3.zero;
+        m_TankRigidbody.angularVelocity = Vector3.zero;
 
         UpdateHealthSlider();
         UpdateCooldownSlider();
