@@ -58,11 +58,11 @@ public class Manager : MonoBehaviour
 
     private IEnumerator GameLoop()
     {
-        yield return StartCoroutine(RoundStart());
+        yield return StartCoroutine(StartRound());
         
-        yield return StartCoroutine(RoundPlay());
+        yield return StartCoroutine(PlayRound());
         
-        yield return StartCoroutine(RoundEnd());
+        yield return StartCoroutine(EndRound());
         
         if (GameOver())
             SceneManager.LoadScene("Main");
@@ -70,7 +70,7 @@ public class Manager : MonoBehaviour
             StartCoroutine(GameLoop());
     }
 
-    private IEnumerator RoundStart()
+    private IEnumerator StartRound()
     {
         SetControlsEnabled(false);
         ResetTanks();
@@ -81,7 +81,7 @@ public class Manager : MonoBehaviour
         yield return m_StartWait;
     }
 
-    private IEnumerator RoundPlay()
+    private IEnumerator PlayRound()
     {
         SetControlsEnabled(true);
 
@@ -91,7 +91,7 @@ public class Manager : MonoBehaviour
             yield return null;
     }
 
-    private IEnumerator RoundEnd()
+    private IEnumerator EndRound()
     {
         SetControlsEnabled(false);
 
