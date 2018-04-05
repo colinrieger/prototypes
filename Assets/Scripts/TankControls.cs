@@ -56,6 +56,9 @@ public class TankControls : MonoBehaviour
             m_CurrentFireCooldown -= Time.deltaTime;
             UpdateCooldownSlider();
         }
+
+        if (Vector3.Dot(transform.up, Vector3.down) >= 0.99f)
+            Death();
     }
 
     public void Fire()

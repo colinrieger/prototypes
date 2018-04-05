@@ -46,17 +46,17 @@ public class PlayerControls : MonoBehaviour
         Quaternion tankRotation = Quaternion.Euler(0f, m_HorizontalInputValue * m_TankControls.m_TankRotationSpeed * Time.deltaTime, 0f);
         m_TankRigidbody.MoveRotation(m_TankRigidbody.rotation * tankRotation);
         
-        m_TankTurret.transform.rotation = m_TankTurret.transform.rotation *
-                                          Quaternion.Euler(0f, m_MouseXInputValue * m_TankControls.m_TurretRotationSpeed * Time.deltaTime, 0f) *
-                                          Quaternion.Inverse(tankRotation);
+        m_TankTurret.transform.localRotation = m_TankTurret.transform.localRotation *
+                                               Quaternion.Euler(0f, m_MouseXInputValue * m_TankControls.m_TurretRotationSpeed * Time.deltaTime, 0f) *
+                                               Quaternion.Inverse(tankRotation);
 
-        Quaternion barrelRotation = m_TankBarrel.transform.rotation *
+        Quaternion barrelRotation = m_TankBarrel.transform.localRotation *
                                     Quaternion.Euler(-m_MouseYInputValue * m_TankControls.m_BarrelRotationSpeed * Time.deltaTime, 0f, 0f);
-        m_TankBarrel.transform.rotation = Quaternion.Euler(ClampAngle(barrelRotation.eulerAngles.x,
-                                                                      m_TankControls.m_BarrelMinXRotation,
-                                                                      m_TankControls.m_BarrelMaxXRotation),
-                                                           barrelRotation.eulerAngles.y,
-                                                           barrelRotation.eulerAngles.z);
+        m_TankBarrel.transform.localRotation = Quaternion.Euler(ClampAngle(barrelRotation.eulerAngles.x,
+                                                                           m_TankControls.m_BarrelMinXRotation,
+                                                                           m_TankControls.m_BarrelMaxXRotation),
+                                                                m_TankBarrel.transform.localEulerAngles.y,
+                                                                m_TankBarrel.transform.localEulerAngles.z);
 
         Vector3 movement = transform.forward * m_VerticalInputValue * m_TankControls.m_Speed * Time.deltaTime;
         m_TankRigidbody.MovePosition(m_TankRigidbody.position + movement);
@@ -84,7 +84,7 @@ public class PlayerControls : MonoBehaviour
 
         m_FiringArc.SetPositions(arcArray);
         // arc positions are calculated locally, so counter the x barrel rotation on the firing arc
-        m_FiringArc.transform.localRotation = Quaternion.Euler(-m_TankBarrel.transform.localEulerAngles.x, m_TankBarrel.transform.localEulerAngles.y, m_TankBarrel.transform.localEulerAngles.z);
+        m_FiringArc.transform.localRotation = Quaternion.Euler(-m_TankBarrel.transform.localEulerAngles.x, m_FiringArc.transform.localEulerAngles.y, m_FiringArc.transform.localEulerAngles.z);
     }
 
     private float ClampAngle(float angle, float min, float max)
