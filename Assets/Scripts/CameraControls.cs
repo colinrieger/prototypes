@@ -2,17 +2,18 @@
 
 public class CameraControls : MonoBehaviour
 {
-    [HideInInspector] public GameObject m_Target;
-    Vector3 m_PositionOffset = new Vector3(0f, -2f, 8f);
+    public GameObject Target { get; set; }
+
+    private Vector3 m_PositionOffset = new Vector3(0f, -2f, 8f);
 
     private void FixedUpdate()
     {
-        if (!m_Target)
+        if (!Target)
             return;
 
-        Quaternion rotation = Quaternion.Euler(0, m_Target.transform.eulerAngles.y, 0);
-        transform.position = m_Target.transform.position - (rotation * m_PositionOffset);
+        Quaternion rotation = Quaternion.Euler(0, Target.transform.eulerAngles.y, 0);
+        transform.position = Target.transform.position - (rotation * m_PositionOffset);
 
-        transform.LookAt(m_Target.transform.position);
+        transform.LookAt(Target.transform.position);
     }
 }

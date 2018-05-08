@@ -4,17 +4,21 @@ public class ShellExplosion : MonoBehaviour
 {
     public LayerMask m_TankLayerMask;
     public ParticleSystem m_ExplosionParticles;
-    public float m_MaxDamage = 50f;
-    public float m_Force = 1000f;
-    public float m_Radius = 5f;
-    public float m_Lifetime = 10f;
+
+    private float m_MaxDamage = 50f;
+    private float m_Force = 1000f;
+    private float m_Radius = 5f;
+    private float m_Lifetime = 10f;
 
     private Rigidbody m_ShellRigidbody;
 
-    private void Start()
+    private void Awake()
     {
         m_ShellRigidbody = GetComponent<Rigidbody>();
+    }
 
+    private void Start()
+    {
         Destroy(gameObject, m_Lifetime);
     }
 

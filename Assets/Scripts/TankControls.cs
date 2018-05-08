@@ -1,37 +1,51 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.UI;
 
 public class TankControls : MonoBehaviour
 {
-    public float m_StartingHealth = 100f;
-    public float m_Speed = 20f;
-    public float m_TankRotationSpeed = 90f;
-    public float m_TurretRotationSpeed = 180f;
-    public float m_BarrelRotationSpeed = 30f;
-    public float m_BarrelMinXRotation = -15f;
-    public float m_BarrelMaxXRotation = 0f;
-    public float m_ShellVelocity = 60f;
-    public float m_FireCooldown = 2f; // seconds
     public Rigidbody m_ShellRigidBody;
     public GameObject m_ExplosionPrefab;
-    public Transform m_ShellOriginTransform;
-    public Slider m_HealthSlider;
-    public Slider m_CooldownSlider;
 
+    public float Speed { get { return m_Speed; } set { m_Speed = value; } }
+    public float TankRotationSpeed { get { return m_TankRotationSpeed; } set { m_TankRotationSpeed = value; } }
+    public float ShellVelocity { get { return m_ShellVelocity; } set { m_ShellVelocity = value; } }
+
+    private float m_StartingHealth = 100f;
+    private float m_Speed = 20f;
+    private float m_TankRotationSpeed = 90f;
+    private float m_TurretRotationSpeed = 180f;
+    private float m_BarrelRotationSpeed = 30f;
+    private float m_BarrelMinXRotation = -15f;
+    private float m_BarrelMaxXRotation = 0f;
+    private float m_ShellVelocity = 60f;
+    private float m_FireCooldown = 2f; // seconds
+    
     private Rigidbody m_TankRigidbody;
+    private GameObject m_TankTurret;
+    private GameObject m_TankBarrel;
+    private Slider m_HealthSlider;
+    private Slider m_CooldownSlider;
+    private Transform m_ShellOriginTransform;
     private float m_CurrentHealth;
     private float m_CurrentFireCooldown;
     private ParticleSystem m_ExplosionParticles;
 
     private void Awake()
     {
+        m_TankRigidbody = GetComponent<Rigidbody>();
+        m_TankTurret = transform.Find("Renderers/Turret").gameObject;
+        m_TankBarrel = transform.Find("Renderers/Turret/Barrel").gameObject;
+        m_HealthSlider = transform.Find("Renderers/Turret/Canvas/HealthSlider").GetComponent<Slider>();
+        m_CooldownSlider = transform.Find("Renderers/Turret/Canvas/CooldownSlider").GetComponent<Slider>();
+        m_ShellOriginTransform = transform.Find("Renderers/Turret/Barrel/ShellOriginTransform").transform;
         m_ExplosionParticles = Instantiate(m_ExplosionPrefab).GetComponent<ParticleSystem>();
+
         m_ExplosionParticles.gameObject.SetActive(false);
     }
 
     private void Start()
     {
-        m_TankRigidbody = GetComponent<Rigidbody>();
     }
 
     private void OnEnable()
@@ -59,6 +73,49 @@ public class TankControls : MonoBehaviour
 
         if (Vector3.Dot(transform.up, Vector3.down) >= 0.99f)
             Death();
+    }
+
+    public Quaternion RotateTank(float yRotationValue)
+    {
+        Quaternion tankRotation = Quaternion.Euler(0f, yRotationValue * m_TankRotationSpeed * Time.deltaTime, 0f);
+        m_TankRigidbody.MoveRotation(m_TankRigidbody.rotation * tankRotation);
+        return tankRotation;
+    }
+
+    public void RotateTankTowards(Quaternion rotationToTarget)
+    {
+        Quaternion tankRotation = Quaternion.RotateTowards(transform.rotation, rotationToTarget, Time.deltaTime * m_TankRotationSpeed);
+        m_TankRigidbody.MoveRotation(tankRotation);
+    }
+
+    public void RotateTurret(float yRotationValue, Quaternion inverseRotation)
+    {
+        m_TankTurret.transform.localRotation = m_TankTurret.transform.localRotation *
+                                               Quaternion.Euler(0f, yRotationValue * m_TurretRotationSpeed * Time.deltaTime, 0f) *
+                                               Quaternion.Inverse(inverseRotation);
+    }
+
+    public void RotateTurretTowards(Quaternion rotationToTarget)
+    {
+        Quaternion turretRotation = Quaternion.RotateTowards(m_TankTurret.transform.rotation, rotationToTarget, Time.deltaTime * m_TurretRotationSpeed);
+        m_TankTurret.transform.rotation = turretRotation;
+    }
+
+    public void RotateBarrel(float xRotationValue)
+    {
+        Quaternion barrelRotation = m_TankBarrel.transform.localRotation *
+                                    Quaternion.Euler(-xRotationValue * m_BarrelRotationSpeed * Time.deltaTime, 0f, 0f);
+        m_TankBarrel.transform.localRotation = Quaternion.Euler(ClampAngle(barrelRotation.eulerAngles.x,
+                                                                           m_BarrelMinXRotation,
+                                                                           m_BarrelMaxXRotation),
+                                                                m_TankBarrel.transform.localEulerAngles.y,
+                                                                m_TankBarrel.transform.localEulerAngles.z);
+    }
+
+    public void MoveTank(float forwardMoveValue = 1f)
+    {
+        Vector3 movement = transform.forward * forwardMoveValue * m_Speed * Time.deltaTime;
+        m_TankRigidbody.MovePosition(m_TankRigidbody.position + movement);
     }
 
     public void Fire()
@@ -98,5 +155,12 @@ public class TankControls : MonoBehaviour
         m_ExplosionParticles.Play();
 
         gameObject.SetActive(false);
+    }
+
+    private float ClampAngle(float angle, float min, float max)
+    {
+        if (angle > 180)
+            return Math.Max(angle - 360, min) + 360;
+        return Math.Min(angle, max);
     }
 }

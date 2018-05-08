@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.AI;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
@@ -142,7 +141,7 @@ public class Manager : MonoBehaviour
     private void SpawnPlayerTank()
     {
         m_PlayerTank = Instantiate(m_TankPrefab) as GameObject;
-        Camera.main.GetComponent<CameraControls>().m_Target = m_PlayerTank.transform.Find("Renderers/Turret/CameraTargetTransform").gameObject;
+        Camera.main.GetComponent<CameraControls>().Target = m_PlayerTank.transform.Find("Renderers/Turret/CameraTargetTransform").gameObject;
         m_PlayerTank.AddComponent<PlayerControls>();
         m_Tanks.Add(m_PlayerTank);
     }
@@ -150,7 +149,8 @@ public class Manager : MonoBehaviour
     private void SpawnAITank()
     {
         GameObject aiTank = Instantiate(m_TankPrefab) as GameObject;
-        aiTank.AddComponent<AIControls>().m_TargetTank = m_PlayerTank;
+        aiTank.AddComponent<AIControls>().TargetTank = m_PlayerTank;
+        aiTank.GetComponent<TankControls>().ShellVelocity = 100f;
         m_Tanks.Add(aiTank);
     }
 
