@@ -2,8 +2,8 @@
 
 public class ShellExplosion : MonoBehaviour
 {
-    public LayerMask m_TankLayerMask;
-    public ParticleSystem m_ExplosionParticles;
+    public LayerMask TankLayerMask;
+    public ParticleSystem ExplosionParticles;
 
     private float m_MaxDamage = 50f;
     private float m_Force = 1000f;
@@ -29,7 +29,7 @@ public class ShellExplosion : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        Collider[] colliders = Physics.OverlapSphere(transform.position, m_Radius, m_TankLayerMask);
+        Collider[] colliders = Physics.OverlapSphere(transform.position, m_Radius, TankLayerMask);
         for (int i = 0; i < colliders.Length; i++)
         {
             Rigidbody targetRigidbody = colliders[i].GetComponent<Rigidbody>();
@@ -43,11 +43,11 @@ public class ShellExplosion : MonoBehaviour
                 tankControls.ApplyDamage(CalculateDamage(targetRigidbody.position));
         }
         
-        m_ExplosionParticles.transform.parent = null;
-        m_ExplosionParticles.Play();
+        ExplosionParticles.transform.parent = null;
+        ExplosionParticles.Play();
 
-        ParticleSystem.MainModule mainModule = m_ExplosionParticles.main;
-        Destroy(m_ExplosionParticles.gameObject, mainModule.duration);
+        ParticleSystem.MainModule mainModule = ExplosionParticles.main;
+        Destroy(ExplosionParticles.gameObject, mainModule.duration);
 
         Destroy(gameObject);
     }

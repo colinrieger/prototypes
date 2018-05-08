@@ -4,8 +4,8 @@ using UnityEngine.UI;
 
 public class TankControls : MonoBehaviour
 {
-    public Rigidbody m_ShellRigidBody;
-    public GameObject m_ExplosionPrefab;
+    public Rigidbody ShellRigidBody;
+    public GameObject ExplosionPrefab;
 
     public float Speed { get { return m_Speed; } set { m_Speed = value; } }
     public float TankRotationSpeed { get { return m_TankRotationSpeed; } set { m_TankRotationSpeed = value; } }
@@ -39,13 +39,9 @@ public class TankControls : MonoBehaviour
         m_HealthSlider = transform.Find("Renderers/Turret/Canvas/HealthSlider").GetComponent<Slider>();
         m_CooldownSlider = transform.Find("Renderers/Turret/Canvas/CooldownSlider").GetComponent<Slider>();
         m_ShellOriginTransform = transform.Find("Renderers/Turret/Barrel/ShellOriginTransform").transform;
-        m_ExplosionParticles = Instantiate(m_ExplosionPrefab).GetComponent<ParticleSystem>();
+        m_ExplosionParticles = Instantiate(ExplosionPrefab).GetComponent<ParticleSystem>();
 
         m_ExplosionParticles.gameObject.SetActive(false);
-    }
-
-    private void Start()
-    {
     }
 
     private void OnEnable()
@@ -122,7 +118,7 @@ public class TankControls : MonoBehaviour
     {
         if (m_CurrentFireCooldown > 0f)
             return;
-        Rigidbody shellInstance = Instantiate(m_ShellRigidBody, m_ShellOriginTransform.position, m_ShellOriginTransform.rotation) as Rigidbody;
+        Rigidbody shellInstance = Instantiate(ShellRigidBody, m_ShellOriginTransform.position, m_ShellOriginTransform.rotation) as Rigidbody;
         shellInstance.velocity = m_ShellVelocity * m_ShellOriginTransform.forward;
         m_CurrentFireCooldown = m_FireCooldown;
         UpdateCooldownSlider();

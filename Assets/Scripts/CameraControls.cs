@@ -6,7 +6,7 @@ public class CameraControls : MonoBehaviour
 
     private Vector3 m_PositionOffset = new Vector3(0f, -2f, 8f);
 
-    private void FixedUpdate()
+    void Update()
     {
         if (!Target)
             return;

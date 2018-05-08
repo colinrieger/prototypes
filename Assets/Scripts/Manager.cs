@@ -6,9 +6,9 @@ using UnityEngine.UI;
 
 public class Manager : MonoBehaviour
 {
-    public GameObject m_TankPrefab;
-    public GameObject m_PauseMenu;
-    public Text m_GameText;
+    public GameObject TankPrefab;
+    public GameObject PauseMenu;
+    public Text GameText;
 
     private GameObject m_PlayerTank;
     private List<GameObject> m_Tanks = new List<GameObject>();
@@ -75,7 +75,7 @@ public class Manager : MonoBehaviour
         ResetTanks();
 
         m_RoundNumber++;
-        m_GameText.text = string.Format("Round {0}", m_RoundNumber);
+        GameText.text = string.Format("Round {0}", m_RoundNumber);
 
         yield return m_StartWait;
     }
@@ -84,7 +84,7 @@ public class Manager : MonoBehaviour
     {
         SetControlsEnabled(true);
 
-        m_GameText.text = string.Empty;
+        GameText.text = string.Empty;
 
         while (!RoundComplete())
             yield return null;
@@ -99,9 +99,9 @@ public class Manager : MonoBehaviour
         else
             m_AIWins++;
 
-        m_GameText.text = string.Format("Player: {0}    AI: {1}", m_PlayerWins, m_AIWins);
+        GameText.text = string.Format("Player: {0}    AI: {1}", m_PlayerWins, m_AIWins);
         if (GameOver())
-            m_GameText.text += string.Format("\n\n{0} Wins", PlayerWon() ? "Player" : "AI");
+            GameText.text += string.Format("\n\n{0} Wins", PlayerWon() ? "Player" : "AI");
 
         yield return m_EndWait;
     }
@@ -116,7 +116,7 @@ public class Manager : MonoBehaviour
     {
         bool pause = Time.timeScale != 0;
 
-        m_PauseMenu.SetActive(pause);
+        PauseMenu.SetActive(pause);
         Cursor.visible = pause;
         Cursor.lockState = pause ? CursorLockMode.None : CursorLockMode.Locked;
         Time.timeScale = pause ? 0 : 1;
@@ -140,7 +140,7 @@ public class Manager : MonoBehaviour
 
     private void SpawnPlayerTank()
     {
-        m_PlayerTank = Instantiate(m_TankPrefab) as GameObject;
+        m_PlayerTank = Instantiate(TankPrefab) as GameObject;
         Camera.main.GetComponent<CameraControls>().Target = m_PlayerTank.transform.Find("Renderers/Turret/CameraTargetTransform").gameObject;
         m_PlayerTank.AddComponent<PlayerControls>();
         m_Tanks.Add(m_PlayerTank);
@@ -148,7 +148,7 @@ public class Manager : MonoBehaviour
 
     private void SpawnAITank()
     {
-        GameObject aiTank = Instantiate(m_TankPrefab) as GameObject;
+        GameObject aiTank = Instantiate(TankPrefab) as GameObject;
         aiTank.AddComponent<AIControls>().TargetTank = m_PlayerTank;
         aiTank.GetComponent<TankControls>().ShellVelocity = 100f;
         m_Tanks.Add(aiTank);
