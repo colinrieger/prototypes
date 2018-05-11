@@ -57,10 +57,10 @@ public class AIControls : MonoBehaviour
 
         m_TankControls.RotateTankTowards(m_RotationToNavDestination);
 
+        m_TankControls.RotateTurretTowards(m_RotationToTargetTank);
+
         if (TankShouldMove())
             m_TankControls.MoveTank();
-
-        m_TankControls.RotateTurretTowards(m_RotationToTargetTank);
 
         if (TankShouldFire())
             m_TankControls.Fire();

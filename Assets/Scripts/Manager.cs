@@ -55,14 +55,20 @@ public class Manager : MonoBehaviour
         StartCoroutine(GameLoop());
     }
 
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+            TogglePause();
+    }
+
     private IEnumerator GameLoop()
     {
         yield return StartCoroutine(StartRound());
-        
+
         yield return StartCoroutine(PlayRound());
-        
+
         yield return StartCoroutine(EndRound());
-        
+
         if (GameOver())
             SceneManager.LoadScene("Main");
         else
@@ -104,12 +110,6 @@ public class Manager : MonoBehaviour
             GameText.text += string.Format("\n\n{0} Wins", PlayerWon() ? "Player" : "AI");
 
         yield return m_EndWait;
-    }
-
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Escape))
-            TogglePause();
     }
 
     private void TogglePause()

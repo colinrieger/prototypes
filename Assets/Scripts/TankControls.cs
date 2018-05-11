@@ -67,7 +67,7 @@ public class TankControls : MonoBehaviour
             UpdateCooldownSlider();
         }
 
-        if (Vector3.Dot(transform.up, Vector3.down) >= 0.99f)
+        if (TankIsUpsideDown())
             Death();
     }
 
@@ -132,6 +132,11 @@ public class TankControls : MonoBehaviour
 
         if (m_CurrentHealth <= 0f)
             Death();
+    }
+
+    private bool TankIsUpsideDown()
+    {
+        return Vector3.Dot(transform.up, Vector3.down) >= 0.99f;
     }
 
     private void UpdateHealthSlider()
