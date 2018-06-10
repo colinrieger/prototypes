@@ -55,12 +55,10 @@ public class AIControls : MonoBehaviour
         m_NavMeshAgent.angularSpeed = m_TankControls.TankRotationSpeed;
 
         m_NavMeshAgent.destination = TargetTank.transform.position;
+
         UpdateRotationTargets();
-
         m_TankControls.RotateTankTowards(m_TankRotationToNavDestination);
-
         m_TankControls.RotateTurretTowards(m_TurretRotationToTargetTank);
-
         m_TankControls.RotateBarrelTowards(m_BarrelRotationToTargetTank);
 
         if (TankShouldMove())

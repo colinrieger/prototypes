@@ -44,9 +44,7 @@ public class PlayerControls : MonoBehaviour
         Quaternion tankRotation = m_TankControls.RotateTank(m_HorizontalInputValue);
 
         m_TankControls.RotateTurret(m_MouseXInputValue, tankRotation);
-
         m_TankControls.RotateBarrel(m_MouseYInputValue);
-
         m_TankControls.MoveTank(m_VerticalInputValue);
 
         UpdateFiringArc();
