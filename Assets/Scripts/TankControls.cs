@@ -112,7 +112,7 @@ public class TankControls : MonoBehaviour
 
         CurrentFireCooldown += Time.deltaTime;
 
-        if (TankIsUpsideDown())
+        if (TankIsUpsideDown() || TankIsBelowLevel())
             Death();
     }
 
@@ -217,6 +217,11 @@ public class TankControls : MonoBehaviour
     private bool TankIsUpsideDown()
     {
         return Vector3.Dot(transform.up, Vector3.down) >= 0.99f;
+    }
+
+    private bool TankIsBelowLevel()
+    {
+        return transform.position.y < -1f;
     }
 
     private void UpdateHealthSlider()
