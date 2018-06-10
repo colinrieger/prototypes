@@ -96,6 +96,8 @@ public class TankControls : MonoBehaviour
 
     private void OnEnable()
     {
+        ResetModifiers();
+
         CurrentHealth = m_StartingHealth;
         CurrentFireCooldown = m_FireCooldown;
 
