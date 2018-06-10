@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -7,6 +8,9 @@ using UnityEngine.UI;
 public class Manager : MonoBehaviour
 {
     public GameObject TankPrefab;
+    public GameObject FirePickupPrefab;
+    public GameObject HealthPickupPrefab;
+    public GameObject SpeedPickupPrefab;
     public GameObject PauseMenu;
     public Text GameText;
 
@@ -24,22 +28,29 @@ public class Manager : MonoBehaviour
     private const float c_EndDelay = 3f;
     private const float c_RoundsToWin = 3f;
 
-    struct StartingTransform
+    struct TankStartingTransform
     {
         public Vector3 position;
         public Quaternion rotation;
     }
-
-    private List<StartingTransform> m_StartingTransforms = new List<StartingTransform>()
+    private List<TankStartingTransform> m_TankStartingTransforms = new List<TankStartingTransform>()
     {
-        new StartingTransform() { position = new Vector3(0f, 0.1f, 0f), rotation = Quaternion.Euler(new Vector3(0f, 0f, 0f)) },
-        new StartingTransform() { position = new Vector3(40f, 0.1f, 40f), rotation = Quaternion.Euler(new Vector3(0f, 225f, 0f)) },
-        new StartingTransform() { position = new Vector3(40f, 0.1f, -40f), rotation = Quaternion.Euler(new Vector3(0f, 315f, 0f)) },
-        new StartingTransform() { position = new Vector3(-40f, 0.1f, 40f), rotation = Quaternion.Euler(new Vector3(0f, 135f, 0f)) },
-        new StartingTransform() { position = new Vector3(-40f, 0.1f, -40f), rotation = Quaternion.Euler(new Vector3(0f, 45f, 0f)) }
+        new TankStartingTransform() { position = new Vector3(0f, 0.1f, 0f), rotation = Quaternion.Euler(new Vector3(0f, 0f, 0f)) },
+        new TankStartingTransform() { position = new Vector3(40f, 0.1f, 40f), rotation = Quaternion.Euler(new Vector3(0f, 225f, 0f)) },
+        new TankStartingTransform() { position = new Vector3(40f, 0.1f, -40f), rotation = Quaternion.Euler(new Vector3(0f, 315f, 0f)) },
+        new TankStartingTransform() { position = new Vector3(-40f, 0.1f, 40f), rotation = Quaternion.Euler(new Vector3(0f, 135f, 0f)) },
+        new TankStartingTransform() { position = new Vector3(-40f, 0.1f, -40f), rotation = Quaternion.Euler(new Vector3(0f, 45f, 0f)) }
     };
+    private List<int> m_TankStartingTransformIndexes;
 
-    private List<int> m_StartingTransformIndexes;
+    private List<Vector3> m_PickupStartingPositions = new List<Vector3>()
+    {
+        new Vector3(20f, 2f, 20f),
+        new Vector3(20f, 2f, -20f),
+        new Vector3(-20f, 2f, 20f),
+        new Vector3(-20f, 2f, -20f)
+    };
+    private List<GameObject> m_Pickups = new List<GameObject>();
 
     private void Start()
     {
@@ -78,6 +89,7 @@ public class Manager : MonoBehaviour
     private IEnumerator StartRound()
     {
         SetControlsEnabled(false);
+        RandomizePickups();
         ResetTanks();
 
         m_RoundNumber++;
@@ -122,20 +134,20 @@ public class Manager : MonoBehaviour
         Time.timeScale = pause ? 0 : 1;
     }
 
-    private void GenerateStartingTransformIndexes()
+    private void GenerateTankStartingTransformIndexes()
     {
         Random.InitState(System.DateTime.Now.Millisecond);
 
-        m_StartingTransformIndexes = new List<int>();
-        for (int i = 0; i < m_StartingTransforms.Count; i++)
-            m_StartingTransformIndexes.Insert(Random.Range(0, m_StartingTransformIndexes.Count + 1), i++);
+        m_TankStartingTransformIndexes = new List<int>();
+        for (int i = 0; i < m_TankStartingTransforms.Count; i++)
+            m_TankStartingTransformIndexes.Insert(Random.Range(0, m_TankStartingTransformIndexes.Count + 1), i++);
     }
 
-    private int GetStartingTransformIndex()
+    private int GetTankStartingTransformIndex()
     {
-        int startingTransformindex = m_StartingTransformIndexes.Count > 0 ? m_StartingTransformIndexes[0] : 0;
-        m_StartingTransformIndexes.RemoveAt(0);
-        return startingTransformindex;
+        int tankStartingTransformindex = m_TankStartingTransformIndexes.Count > 0 ? m_TankStartingTransformIndexes[0] : 0;
+        m_TankStartingTransformIndexes.RemoveAt(0);
+        return tankStartingTransformindex;
     }
 
     private void SpawnPlayerTank()
@@ -155,15 +167,15 @@ public class Manager : MonoBehaviour
 
     private void RandomlyPlaceTank(GameObject tank)
     {
-        int startingIndex = GetStartingTransformIndex();
-        tank.transform.position = m_StartingTransforms[startingIndex].position;
-        tank.transform.rotation = m_StartingTransforms[startingIndex].rotation;
+        int startingIndex = GetTankStartingTransformIndex();
+        tank.transform.position = m_TankStartingTransforms[startingIndex].position;
+        tank.transform.rotation = m_TankStartingTransforms[startingIndex].rotation;
         tank.transform.Find("Renderers/Turret").transform.localRotation = Quaternion.Euler(new Vector3(0f, 0f, 0f));
     }
 
     private void ResetTanks()
     {
-        GenerateStartingTransformIndexes();
+        GenerateTankStartingTransformIndexes();
 
         foreach (GameObject tank in m_Tanks)
         {
@@ -171,6 +183,44 @@ public class Manager : MonoBehaviour
             tank.SetActive(true);
             RandomlyPlaceTank(tank);
         }
+    }
+
+    private void RandomizePickups()
+    {
+        foreach (GameObject pickup in m_Pickups.ToList())
+        {
+            m_Pickups.Remove(pickup);
+            Destroy(pickup);
+        }
+
+        foreach (Vector3 pickupStartingPosition in m_PickupStartingPositions)
+        {
+            GameObject pickupPrefab = GetRandomPickupPrefab();
+            if (pickupPrefab != null)
+            {
+                GameObject pickup = Instantiate(pickupPrefab, pickupStartingPosition, new Quaternion()) as GameObject;
+                m_Pickups.Add(pickup);
+            }
+        }
+    }
+
+    private GameObject GetRandomPickupPrefab()
+    {
+        Random.InitState(System.DateTime.Now.Millisecond);
+
+        int minModifierType = System.Enum.GetValues(typeof(ModifierType)).Cast<int>().Min() + 1; // skip None
+        int maxModifierType = System.Enum.GetValues(typeof(ModifierType)).Cast<int>().Max();
+        
+        switch ((ModifierType)Random.Range(minModifierType, maxModifierType + 1))
+        {
+            case ModifierType.Health:
+                return HealthPickupPrefab;
+            case ModifierType.Speed:
+                return SpeedPickupPrefab;
+            case ModifierType.Fire:
+                return FirePickupPrefab;
+        }
+        return null;
     }
 
     private bool RoundComplete()
