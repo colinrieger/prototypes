@@ -40,8 +40,6 @@ public class AIControls : MonoBehaviour
         m_TankBarrel.transform.localEulerAngles = new Vector3(-2f, 0f, 0f);
 
         m_NavMeshAgent = gameObject.AddComponent<NavMeshAgent>();
-        m_NavMeshAgent.speed = m_TankControls.Speed;
-        m_NavMeshAgent.angularSpeed = m_TankControls.TankRotationSpeed;
         m_NavMeshAgent.autoBraking = false;
         m_NavMeshAgent.updatePosition = false;
         m_NavMeshAgent.updateRotation = false;
@@ -51,7 +49,10 @@ public class AIControls : MonoBehaviour
     {
         if (!HaveTargetTank())
             return;
-        
+
+        m_NavMeshAgent.speed = m_TankControls.Speed;
+        m_NavMeshAgent.angularSpeed = m_TankControls.TankRotationSpeed;
+
         m_NavMeshAgent.destination = TargetTank.transform.position;
         UpdateRotationTargets();
 

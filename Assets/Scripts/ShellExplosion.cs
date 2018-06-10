@@ -40,7 +40,7 @@ public class ShellExplosion : MonoBehaviour
 
             TankControls tankControls = targetRigidbody.GetComponent<TankControls>();
             if (tankControls != null)
-                tankControls.ApplyDamage(CalculateDamage(targetRigidbody.position));
+                tankControls.CurrentHealth -= CalculateDamage(targetRigidbody.position);
         }
         
         ExplosionParticles.transform.parent = null;

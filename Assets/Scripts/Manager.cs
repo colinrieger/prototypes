@@ -150,7 +150,6 @@ public class Manager : MonoBehaviour
     {
         GameObject aiTank = Instantiate(TankPrefab) as GameObject;
         aiTank.AddComponent<AIControls>().TargetTank = m_PlayerTank;
-        aiTank.GetComponent<TankControls>().ShellVelocity = 100f;
         m_Tanks.Add(aiTank);
     }
 
