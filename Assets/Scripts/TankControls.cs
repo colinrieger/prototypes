@@ -153,6 +153,12 @@ public class TankControls : MonoBehaviour
                                                                 m_TankBarrel.transform.localEulerAngles.z);
     }
 
+    public void RotateBarrelTowards(Quaternion rotationToTarget)
+    {
+        Quaternion barrelRotation = Quaternion.RotateTowards(m_TankBarrel.transform.localRotation, rotationToTarget, Time.deltaTime * m_BarrelRotationSpeed);
+        m_TankBarrel.transform.localRotation = barrelRotation;
+    }
+
     public void MoveTank(float forwardMoveValue = 1f)
     {
         Vector3 movement = transform.forward * forwardMoveValue * Speed * Time.deltaTime;

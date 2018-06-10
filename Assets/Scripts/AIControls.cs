@@ -20,8 +20,9 @@ public class AIControls : MonoBehaviour
     private GameObject m_TankTurret;
     private GameObject m_TankBarrel;
     private NavMeshAgent m_NavMeshAgent;
-    private Quaternion m_RotationToNavDestination;
-    private Quaternion m_RotationToTargetTank;
+    private Quaternion m_TankRotationToNavDestination;
+    private Quaternion m_TurretRotationToTargetTank;
+    private Quaternion m_BarrelRotationToTargetTank;
 
     private const float c_MaxAngleToTargetToMove = 10f;
     private const float c_MaxAngleToTargetToFire = 1f;
@@ -56,9 +57,11 @@ public class AIControls : MonoBehaviour
         m_NavMeshAgent.destination = TargetTank.transform.position;
         UpdateRotationTargets();
 
-        m_TankControls.RotateTankTowards(m_RotationToNavDestination);
+        m_TankControls.RotateTankTowards(m_TankRotationToNavDestination);
 
-        m_TankControls.RotateTurretTowards(m_RotationToTargetTank);
+        m_TankControls.RotateTurretTowards(m_TurretRotationToTargetTank);
+
+        m_TankControls.RotateBarrelTowards(m_BarrelRotationToTargetTank);
 
         if (TankShouldMove())
             m_TankControls.MoveTank();
@@ -70,27 +73,32 @@ public class AIControls : MonoBehaviour
     private void UpdateRotationTargets()
     {
         Vector3 targetNavDirection = m_NavMeshAgent.nextPosition - transform.position;
-        m_RotationToNavDestination = (targetNavDirection != Vector3.zero) ? Quaternion.LookRotation(targetNavDirection) : new Quaternion();
-        m_RotationToNavDestination.x = 0;
-        m_RotationToNavDestination.z = 0;
+        m_TankRotationToNavDestination = (targetNavDirection != Vector3.zero) ? Quaternion.LookRotation(targetNavDirection) : new Quaternion();
+        m_TankRotationToNavDestination.x = 0;
+        m_TankRotationToNavDestination.z = 0;
 
         Vector3 targetTankDirection = (m_TargetTankTurret.transform.position - m_TankTurret.transform.position);
-        m_RotationToTargetTank = (targetTankDirection != Vector3.zero) ? Quaternion.LookRotation(targetTankDirection) : new Quaternion();
-        m_RotationToTargetTank.x = 0;
-        m_RotationToTargetTank.z = 0;
+        m_TurretRotationToTargetTank = (targetTankDirection != Vector3.zero) ? Quaternion.LookRotation(targetTankDirection) : new Quaternion();
+        m_TurretRotationToTargetTank.x = 0;
+        m_TurretRotationToTargetTank.z = 0;
+        
+        float distance = targetTankDirection.magnitude;
+        float v = m_TankControls.ShellVelocity;
+        float angle = 0.5f * (Mathf.Asin((-Physics.gravity.y * distance) / (v * v)));
+        m_BarrelRotationToTargetTank = Quaternion.Euler(new Vector3(-angle * Mathf.Rad2Deg, 0f, 0f));
     }
 
     private bool TankShouldMove()
     {
         float distanceToTarget = Vector3.Distance(transform.position, TargetTank.transform.position);
-        float tankToTargetAngle = Quaternion.Angle(transform.rotation, m_RotationToNavDestination);
+        float tankToTargetAngle = Quaternion.Angle(transform.rotation, m_TankRotationToNavDestination);
 
         return (distanceToTarget > c_DistanceToTargetOffset) && (tankToTargetAngle < c_MaxAngleToTargetToMove);
     }
 
     private bool TankShouldFire()
     {
-        if (Quaternion.Angle(m_TankTurret.transform.rotation, m_RotationToTargetTank) > c_MaxAngleToTargetToFire)
+        if (Quaternion.Angle(m_TankTurret.transform.rotation, m_TurretRotationToTargetTank) > c_MaxAngleToTargetToFire)
             return false;
 
         RaycastHit hit;
