@@ -54,6 +54,8 @@ public class Manager : MonoBehaviour
 
     private void Start()
     {
+        Random.InitState(System.DateTime.Now.Millisecond);
+
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
 
@@ -136,7 +138,6 @@ public class Manager : MonoBehaviour
 
     private void GenerateTankStartingTransformIndexes()
     {
-        Random.InitState(System.DateTime.Now.Millisecond);
 
         m_TankStartingTransformIndexes = new List<int>();
         for (int i = 0; i < m_TankStartingTransforms.Count; i++)
@@ -206,8 +207,6 @@ public class Manager : MonoBehaviour
 
     private GameObject GetRandomPickupPrefab()
     {
-        Random.InitState(System.DateTime.Now.Millisecond);
-
         int minModifierType = System.Enum.GetValues(typeof(ModifierType)).Cast<int>().Min() + 1; // skip None
         int maxModifierType = System.Enum.GetValues(typeof(ModifierType)).Cast<int>().Max();
         
