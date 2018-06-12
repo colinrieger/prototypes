@@ -171,7 +171,6 @@ public class Manager : MonoBehaviour
         int startingIndex = GetTankStartingTransformIndex();
         tank.transform.position = m_TankStartingTransforms[startingIndex].position;
         tank.transform.rotation = m_TankStartingTransforms[startingIndex].rotation;
-        tank.transform.Find("Renderers/Turret").transform.localRotation = Quaternion.Euler(new Vector3(0f, 0f, 0f));
     }
 
     private void ResetTanks()

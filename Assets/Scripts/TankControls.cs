@@ -100,6 +100,8 @@ public class TankControls : MonoBehaviour
 
         CurrentHealth = m_StartingHealth;
         CurrentFireCooldown = m_FireCooldown;
+        
+        m_TankTurret.transform.localRotation = Quaternion.Euler(new Vector3(0f, 0f, 0f));
 
         if (m_TankRigidbody != null)
         {
