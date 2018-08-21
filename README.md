@@ -1,2 +1,1 @@
-# tanks
-unity prototype tank game
+# Unity prototype tank game
