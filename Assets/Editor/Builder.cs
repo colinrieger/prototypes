@@ -1,16 +1,14 @@
+using System.Linq;
 using UnityEditor;
 using UnityEngine;
 
 public class Builder : MonoBehaviour
 {
-    static string[] m_Scenes = new string[] {
-        "Assets/Scenes/MainMenu.unity",
-        "Assets/Scenes/Main.unity"
-    };
-
-    [MenuItem("Build/Build Win32")]
+    [MenuItem("Build/Build Win324")]
     public static void BuildWin32()
     {
-        BuildPipeline.BuildPlayer(m_Scenes, "Build/Win32/tanks.exe", BuildTarget.StandaloneWindows, BuildOptions.None);
+        var scenes = EditorBuildSettings.scenes.Where(s => s.enabled).Select(s => s.path).ToArray();
+
+        BuildPipeline.BuildPlayer(scenes, "Build/Win32/tanks.exe", BuildTarget.StandaloneWindows, BuildOptions.None);
     }
 }

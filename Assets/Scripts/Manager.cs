@@ -138,7 +138,6 @@ public class Manager : MonoBehaviour
 
     private void GenerateTankStartingTransformIndexes()
     {
-
         m_TankStartingTransformIndexes = new List<int>();
         for (int i = 0; i < m_TankStartingTransforms.Count; i++)
             m_TankStartingTransformIndexes.Insert(Random.Range(0, m_TankStartingTransformIndexes.Count + 1), i++);
