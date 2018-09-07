@@ -588,8 +588,9 @@ GameObject:
   m_Component:
   - component: {fileID: 1120093751}
   - component: {fileID: 1120093750}
+  - component: {fileID: 1120093752}
   m_Layer: 0
-  m_Name: Manager
+  m_Name: Managers
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -607,12 +608,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   TankPrefab: {fileID: 1779732471802622, guid: 6beee02e766e9c3478278e3c8ad79a2d, type: 2}
-  FirePickupPrefab: {fileID: 1496289621208848, guid: 8739beec71570f845bc93b9e0cc43f1c,
-    type: 2}
-  HealthPickupPrefab: {fileID: 1480134197384534, guid: 3939c50e096a9104eb5295e4a6bab236,
-    type: 2}
-  SpeedPickupPrefab: {fileID: 1355286918342198, guid: a2b96e3c57f48ee4ca3b450622ded44b,
-    type: 2}
   PauseMenu: {fileID: 1971809008}
   GameText: {fileID: 1375375130}
 --- !u!4 &1120093751
@@ -628,6 +623,17 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1120093752
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1120093749}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe24510bd36eb8947a0cfd145c177e9c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1275911437
 GameObject:
   m_ObjectHideFlags: 0
@@ -740,7 +746,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.653, g: 0, b: 0, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -749,7 +755,7 @@ MonoBehaviour:
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_FontData:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 160
+    m_FontSize: 144
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 0
@@ -954,10 +960,10 @@ MonoBehaviour:
   m_Script: {fileID: 1980459831, guid: f70555f144d8491a825f0804e09c671c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_UiScaleMode: 0
+  m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
-  m_ReferenceResolution: {x: 800, y: 600}
+  m_ReferenceResolution: {x: 1920, y: 1080}
   m_ScreenMatchMode: 0
   m_MatchWidthOrHeight: 0
   m_PhysicalUnit: 3

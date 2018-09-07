@@ -2,15 +2,14 @@
 
 public class Pickup : MonoBehaviour
 {
-    public ModifierType ModifierType;
-    public float ModifierDuration;
-    public float RespawnTime;
-    
-    private float m_RotationSpeed = 45f;
+    public Modifier Modifier { get; set; }
+    public float RespawnTime { get; set; }
+
+    private const float c_RotationSpeed = 45f;
     
     void Update()
     {
-        transform.Rotate(Vector3.up, m_RotationSpeed * Time.deltaTime);
+        transform.Rotate(Vector3.up, c_RotationSpeed * Time.deltaTime);
     }
 
     private void OnTriggerEnter(Collider other)
@@ -18,7 +17,7 @@ public class Pickup : MonoBehaviour
         TankControls tankControls = other.gameObject.GetComponent<TankControls>();
         if (tankControls != null)
         {
-            tankControls.AddModifier(ModifierType, ModifierDuration);
+            tankControls.AddModifier(Modifier);
 
             gameObject.SetActive(false);
 

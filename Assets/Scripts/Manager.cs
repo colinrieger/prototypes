@@ -1,6 +1,5 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -8,9 +7,6 @@ using UnityEngine.UI;
 public class Manager : MonoBehaviour
 {
     public GameObject TankPrefab;
-    public GameObject FirePickupPrefab;
-    public GameObject HealthPickupPrefab;
-    public GameObject SpeedPickupPrefab;
     public GameObject PauseMenu;
     public Text GameText;
 
@@ -42,15 +38,6 @@ public class Manager : MonoBehaviour
         new TankStartingTransform() { position = new Vector3(-40f, 0.1f, -40f), rotation = Quaternion.Euler(new Vector3(0f, 45f, 0f)) }
     };
     private List<int> m_TankStartingTransformIndexes;
-
-    private List<Vector3> m_PickupStartingPositions = new List<Vector3>()
-    {
-        new Vector3(20f, 2f, 20f),
-        new Vector3(20f, 2f, -20f),
-        new Vector3(-20f, 2f, 20f),
-        new Vector3(-20f, 2f, -20f)
-    };
-    private List<GameObject> m_Pickups = new List<GameObject>();
 
     private void Start()
     {
@@ -90,8 +77,8 @@ public class Manager : MonoBehaviour
 
     private IEnumerator StartRound()
     {
+        PickupManager.Instance.RandomizePickups();
         SetControlsEnabled(false);
-        RandomizePickups();
         ResetTanks();
 
         m_RoundNumber++;
@@ -182,42 +169,6 @@ public class Manager : MonoBehaviour
             tank.SetActive(true);
             RandomlyPlaceTank(tank);
         }
-    }
-
-    private void RandomizePickups()
-    {
-        foreach (GameObject pickup in m_Pickups.ToList())
-        {
-            m_Pickups.Remove(pickup);
-            Destroy(pickup);
-        }
-
-        foreach (Vector3 pickupStartingPosition in m_PickupStartingPositions)
-        {
-            GameObject pickupPrefab = GetRandomPickupPrefab();
-            if (pickupPrefab != null)
-            {
-                GameObject pickup = Instantiate(pickupPrefab, pickupStartingPosition, new Quaternion()) as GameObject;
-                m_Pickups.Add(pickup);
-            }
-        }
-    }
-
-    private GameObject GetRandomPickupPrefab()
-    {
-        int minModifierType = System.Enum.GetValues(typeof(ModifierType)).Cast<int>().Min() + 1; // skip None
-        int maxModifierType = System.Enum.GetValues(typeof(ModifierType)).Cast<int>().Max();
-        
-        switch ((ModifierType)Random.Range(minModifierType, maxModifierType + 1))
-        {
-            case ModifierType.Health:
-                return HealthPickupPrefab;
-            case ModifierType.Speed:
-                return SpeedPickupPrefab;
-            case ModifierType.Fire:
-                return FirePickupPrefab;
-        }
-        return null;
     }
 
     private bool RoundComplete()

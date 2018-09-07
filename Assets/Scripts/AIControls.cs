@@ -29,6 +29,8 @@ public class AIControls : MonoBehaviour
     private const float c_DistanceToTargetOffset = 20f;
     private const float c_ShellRadius = 0.2f;
 
+    private readonly Vector3 c_DefaultBarrelRotation = new Vector3(-2f, 0f, 0f);
+
     private void Awake()
     {
         m_TankControls = GetComponent<TankControls>();
@@ -38,7 +40,7 @@ public class AIControls : MonoBehaviour
 
     private void Start()
     {
-        m_TankBarrel.transform.localEulerAngles = new Vector3(-2f, 0f, 0f);
+        m_TankBarrel.transform.localEulerAngles = c_DefaultBarrelRotation;
 
         m_NavMeshAgent = gameObject.AddComponent<NavMeshAgent>();
         m_NavMeshAgent.autoBraking = false;

@@ -24,7 +24,7 @@ GameObject:
   - component: {fileID: 136649539609301960}
   - component: {fileID: 114216540707425150}
   m_Layer: 11
-  m_Name: SpeedPickup
+  m_Name: Speed
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -95,9 +95,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b16e896a914bb743b2b2bf7717f630e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ModifierType: 2
-  ModifierDuration: 8
-  RespawnTime: 10
 --- !u!136 &136649539609301960
 CapsuleCollider:
   m_ObjectHideFlags: 1

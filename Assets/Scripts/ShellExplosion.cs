@@ -5,12 +5,12 @@ public class ShellExplosion : MonoBehaviour
     public LayerMask TankLayerMask;
     public ParticleSystem ExplosionParticles;
 
-    private float m_MaxDamage = 50f;
-    private float m_Force = 1000f;
-    private float m_Radius = 5f;
-    private float m_Lifetime = 10f;
-
     private Rigidbody m_ShellRigidbody;
+
+    private const float c_MaxDamage = 50f;
+    private const float c_Force = 1000f;
+    private const float c_Radius = 5f;
+    private const float c_Lifetime = 10f;
 
     private void Awake()
     {
@@ -19,7 +19,7 @@ public class ShellExplosion : MonoBehaviour
 
     private void Start()
     {
-        Destroy(gameObject, m_Lifetime);
+        Destroy(gameObject, c_Lifetime);
     }
 
     private void FixedUpdate()
@@ -29,14 +29,14 @@ public class ShellExplosion : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        Collider[] colliders = Physics.OverlapSphere(transform.position, m_Radius, TankLayerMask);
+        Collider[] colliders = Physics.OverlapSphere(transform.position, c_Radius, TankLayerMask);
         for (int i = 0; i < colliders.Length; i++)
         {
             Rigidbody targetRigidbody = colliders[i].GetComponent<Rigidbody>();
             if (!targetRigidbody)
                 continue;
 
-            targetRigidbody.AddExplosionForce(m_Force, transform.position, m_Radius);
+            targetRigidbody.AddExplosionForce(c_Force, transform.position, c_Radius);
 
             TankControls tankControls = targetRigidbody.GetComponent<TankControls>();
             if (tankControls != null)
@@ -55,8 +55,8 @@ public class ShellExplosion : MonoBehaviour
     private float CalculateDamage(Vector3 targetPosition)
     {
         Vector3 explosionToTarget = targetPosition - transform.position;
-        float relativeDistance = (m_Radius - explosionToTarget.magnitude) / m_Radius;
+        float relativeDistance = (c_Radius - explosionToTarget.magnitude) / c_Radius;
 
-        return Mathf.Max(0f, relativeDistance * m_MaxDamage);
+        return Mathf.Max(0f, relativeDistance * c_MaxDamage);
     }
 }

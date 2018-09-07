@@ -3,36 +3,17 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public enum ModifierType
-{
-    None = 0,
-    Health,
-    Speed,
-    Fire
-}
-
-class Modifier
-{
-    public ModifierType modifierType;
-    public float duration;
-}
-
 public class TankControls : MonoBehaviour
 {
     public Rigidbody ShellRigidBody;
     public GameObject ExplosionPrefab;
-
-    public float Speed { get { return m_Speed + m_SpeedModifier; } }
-    public float TankRotationSpeed { get { return m_TankRotationSpeed + m_TankRotationSpeedModifier; } }
-    public float ShellVelocity { get { return m_ShellVelocity + m_ShellVelocityModifier; } }
-    public float FireCooldown { get { return m_FireCooldown - m_FireCooldownModifier; } }
 
     public float CurrentHealth
     {
         get { return m_CurrentHealth; }
         set
         {
-            m_CurrentHealth = Math.Min(m_StartingHealth, Math.Max(0f, value));
+            m_CurrentHealth = Math.Min(c_StartingHealth, Math.Max(0f, value));
 
             UpdateHealthSlider();
             
@@ -40,6 +21,7 @@ public class TankControls : MonoBehaviour
                 Death();
         }
     }
+
     public float CurrentFireCooldown
     {
         get { return m_CurrentFireCooldown; }
@@ -51,25 +33,30 @@ public class TankControls : MonoBehaviour
         }
     }
 
-    private float m_StartingHealth = 100f;
+    public float Speed { get { return c_Speed + SpeedModifier; } }
+    public float TankRotationSpeed { get { return c_TankRotationSpeed + TankRotationSpeedModifier; } }
+    public float ShellVelocity { get { return c_ShellVelocity + ShellVelocityModifier; } }
+    public float FireCooldown { get { return c_FireCooldown - FireCooldownModifier; } }
+
+    public float SpeedModifier { get; set; }
+    public float TankRotationSpeedModifier { get; set; }
+    public float ShellVelocityModifier { get; set; }
+    public float FireCooldownModifier { get; set; }
+
     private float m_CurrentHealth;
-
-    private float m_Speed = 20f;
-    private float m_TankRotationSpeed = 90f;
-    private float m_TurretRotationSpeed = 180f;
-
-    private float m_BarrelRotationSpeed = 30f;
-    private float m_BarrelMinXRotation = -15f;
-    private float m_BarrelMaxXRotation = 0f;
-
-    private float m_ShellVelocity = 60f;
-    private float m_FireCooldown = 2f; // seconds
     private float m_CurrentFireCooldown;
     
-    private float m_SpeedModifier = 0f;
-    private float m_TankRotationSpeedModifier = 0f;
-    private float m_ShellVelocityModifier = 0f;
-    private float m_FireCooldownModifier = 0f;
+    private const float c_StartingHealth = 100f;
+    private const float c_FireCooldown = 2f; // seconds
+    private const float c_Speed = 20f;
+    private const float c_TankRotationSpeed = 90f;
+    private const float c_TurretRotationSpeed = 180f;
+    private const float c_ShellVelocity = 60f;
+    private const float c_BarrelRotationSpeed = 30f;
+    private const float c_BarrelMinXRotation = -15f;
+    private const float c_BarrelMaxXRotation = 0f;
+
+    private readonly Vector3 c_DefaultTurretRotation = new Vector3(0f, 0f, 0f);
 
     private Rigidbody m_TankRigidbody;
     private GameObject m_TankTurret;
@@ -98,10 +85,10 @@ public class TankControls : MonoBehaviour
     {
         ResetModifiers();
 
-        CurrentHealth = m_StartingHealth;
-        CurrentFireCooldown = m_FireCooldown;
+        CurrentHealth = c_StartingHealth;
+        CurrentFireCooldown = c_FireCooldown;
         
-        m_TankTurret.transform.localRotation = Quaternion.Euler(new Vector3(0f, 0f, 0f));
+        m_TankTurret.transform.localEulerAngles = c_DefaultTurretRotation;
 
         if (m_TankRigidbody != null)
         {
@@ -136,30 +123,30 @@ public class TankControls : MonoBehaviour
     public void RotateTurret(float yRotationValue, Quaternion inverseRotation)
     {
         m_TankTurret.transform.localRotation = m_TankTurret.transform.localRotation *
-                                               Quaternion.Euler(0f, yRotationValue * m_TurretRotationSpeed * Time.deltaTime, 0f) *
+                                               Quaternion.Euler(0f, yRotationValue * c_TurretRotationSpeed * Time.deltaTime, 0f) *
                                                Quaternion.Inverse(inverseRotation);
     }
 
     public void RotateTurretTowards(Quaternion rotationToTarget)
     {
-        Quaternion turretRotation = Quaternion.RotateTowards(m_TankTurret.transform.rotation, rotationToTarget, Time.deltaTime * m_TurretRotationSpeed);
+        Quaternion turretRotation = Quaternion.RotateTowards(m_TankTurret.transform.rotation, rotationToTarget, Time.deltaTime * c_TurretRotationSpeed);
         m_TankTurret.transform.rotation = turretRotation;
     }
 
     public void RotateBarrel(float xRotationValue)
     {
         Quaternion barrelRotation = m_TankBarrel.transform.localRotation *
-                                    Quaternion.Euler(-xRotationValue * m_BarrelRotationSpeed * Time.deltaTime, 0f, 0f);
+                                    Quaternion.Euler(-xRotationValue * c_BarrelRotationSpeed * Time.deltaTime, 0f, 0f);
         m_TankBarrel.transform.localRotation = Quaternion.Euler(ClampAngle(barrelRotation.eulerAngles.x,
-                                                                           m_BarrelMinXRotation,
-                                                                           m_BarrelMaxXRotation),
+                                                                           c_BarrelMinXRotation,
+                                                                           c_BarrelMaxXRotation),
                                                                 m_TankBarrel.transform.localEulerAngles.y,
                                                                 m_TankBarrel.transform.localEulerAngles.z);
     }
 
     public void RotateBarrelTowards(Quaternion rotationToTarget)
     {
-        Quaternion barrelRotation = Quaternion.RotateTowards(m_TankBarrel.transform.localRotation, rotationToTarget, Time.deltaTime * m_BarrelRotationSpeed);
+        Quaternion barrelRotation = Quaternion.RotateTowards(m_TankBarrel.transform.localRotation, rotationToTarget, Time.deltaTime * c_BarrelRotationSpeed);
         m_TankBarrel.transform.localRotation = barrelRotation;
     }
 
@@ -180,9 +167,9 @@ public class TankControls : MonoBehaviour
         CurrentFireCooldown = 0f;
     }
 
-    public void AddModifier(ModifierType modifierType, float modifierDuration)
+    public void AddModifier(Modifier modifier)
     {
-        m_Modifiers.Add(new Modifier() { modifierType = modifierType, duration = modifierDuration });
+        m_Modifiers.Add(modifier);
     }
 
     private void UpdateModifiers()
@@ -193,35 +180,17 @@ public class TankControls : MonoBehaviour
             return;
 
         for (int i = 0; i < m_Modifiers.Count; i++)
-        {
-            Modifier modifier = m_Modifiers[i];
+            m_Modifiers[i].Apply(this);
 
-            switch (modifier.modifierType)
-            {
-                case ModifierType.Health:
-                    CurrentHealth += 20f;
-                    break;
-                case ModifierType.Speed:
-                    m_SpeedModifier = 10f;
-                    m_TankRotationSpeedModifier = 30f;
-                    break;
-                case ModifierType.Fire:
-                    m_ShellVelocityModifier = 40f;
-                    m_FireCooldownModifier = 1f;
-                    break;
-            }
-            modifier.duration -= Time.deltaTime;
-        }
-
-        m_Modifiers.RemoveAll(m => m.duration <= 0f);
+        m_Modifiers.RemoveAll(m => m.Duration <= 0f);
     }
 
     private void ResetModifiers()
     {
-        m_SpeedModifier = 0f;
-        m_TankRotationSpeedModifier = 0f;
-        m_ShellVelocityModifier = 0f;
-        m_FireCooldownModifier = 0f;
+        SpeedModifier = 0f;
+        TankRotationSpeedModifier = 0f;
+        ShellVelocityModifier = 0f;
+        FireCooldownModifier = 0f;
     }
 
     private bool TankIsUpsideDown()
@@ -236,7 +205,7 @@ public class TankControls : MonoBehaviour
 
     private void UpdateHealthSlider()
     {
-        m_HealthSlider.value = (m_CurrentHealth / m_StartingHealth) * 100f;
+        m_HealthSlider.value = (m_CurrentHealth / c_StartingHealth) * 100f;
     }
 
     private void UpdateCooldownSlider()
